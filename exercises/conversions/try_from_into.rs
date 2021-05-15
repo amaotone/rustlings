@@ -12,8 +12,6 @@ struct Color {
     blue: u8,
 }
 
-// I AM NOT DONE
-
 // Your task is to complete this implementation
 // and return an Ok result of inner type Color.
 // You need to create an implementation for a tuple of three integers,
@@ -26,19 +24,44 @@ struct Color {
 // Tuple implementation
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = Box<dyn error::Error>;
-    fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {}
+    fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        let (red, green, blue) = (
+            u8::try_from(tuple.0)?,
+            u8::try_from(tuple.1)?,
+            u8::try_from(tuple.2)?,
+        );
+        Ok(Color { red, green, blue })
+    }
 }
 
 // Array implementation
 impl TryFrom<[i16; 3]> for Color {
     type Error = Box<dyn error::Error>;
-    fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {}
+    fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        let (red, green, blue) = (
+            u8::try_from(arr[0])?,
+            u8::try_from(arr[1])?,
+            u8::try_from(arr[2])?,
+        );
+        Ok(Color { red, green, blue })
+    }
 }
 
 // Slice implementation
 impl TryFrom<&[i16]> for Color {
     type Error = Box<dyn error::Error>;
-    fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {}
+    fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        if slice.len() == 3 {
+            let (red, green, blue) = (
+                u8::try_from(slice[0])?,
+                u8::try_from(slice[1])?,
+                u8::try_from(slice[2])?,
+            );
+            Ok(Color { red, green, blue })
+        } else {
+            Err(Box::new(std::fmt::Error))
+        }
+    }
 }
 
 fn main() {
